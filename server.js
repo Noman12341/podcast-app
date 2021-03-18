@@ -2,11 +2,14 @@ const express = require('express');
 const Parser = require('rss-parser');
 var cors = require('cors')
 const fs = require("fs");
+const path = require('path');
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+// static foller for public data like images
+app.use("/static", express.static(path.join(__dirname + '/Public')));
 
 app.get("/", async (req, res) => {
     const parser = new Parser();
@@ -63,6 +66,14 @@ app.get('/get-live-rss-feed', async (req, res) => {
 })
 
 const PORT = process.env.PORT || 4000;
+
+// product Build
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
+    app.use(express.static('client/build'));
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname + '/client/build/index.html'));
+    });
+}
 
 
 app.listen(PORT, () => {
