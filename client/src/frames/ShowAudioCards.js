@@ -9,7 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import SmallAudioCard from '../Components/SmallAudioCards';
-import Alert from '@material-ui/lab/Alert';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
     mainContainer: {
@@ -37,7 +37,17 @@ const useStyles = makeStyles(() => ({
             color: '#C1272D',
             textDecoration: 'none'
         }
-
+    }, myBtn: {
+        backgroundColor: 'lightgrey',
+        fontWeight: 600,
+        borderRadius: 0,
+        padding: 10,
+        margin: 10,
+        transition: 'all .3s all',
+        '&:hover': {
+            backgroundColor: '#C1272D',
+            color: '#fff'
+        }
     }
 }))
 function ShowAudioCards() {
@@ -45,7 +55,6 @@ function ShowAudioCards() {
 
     const [feeds, setFeeds] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [alert, setAlert] = useState('');
     const links = [{ name: 'spotyfy', href: "https://open.spotify.com/show/4MjXCuDwaxLWAlKjVSS77c" }, { name: 'Apple Podcast', href: "https://podcasts.apple.com/ca/podcast/grindhouse-courthouse-podcast/id1556504779" },
     { name: 'google podacast', href: 'https://podcasts.google.com/feed/aHR0cHM6Ly9tZWRpYS5yc3MuY29tL2dyaW5kaG91c2Vjb3VydGhvdXNlcG9kY2FzdC9mZWVkLnhtbA' }, { name: 'Stitchers', href: 'https://www.breaker.audio/grindhouse-courthouse' }, { name: 'RSS', href: 'https://radiopublic.com/grindhouse-courthouse-podcast-6NB17o' }]
     useEffect(() => {
@@ -58,16 +67,14 @@ function ShowAudioCards() {
                     setIsLoading(false);
                 }).catch(error => {
                     console.log(error);
-                    setAlert(error);
                 });
         }
         getFeedsArr();
     }, [])
     return <Container className={classes.mainContainer}>
         {isLoading ? <CircularProgress /> : <MainAudioCard episode={feeds[0].itunes.episode} mp3Src={feeds[0].enclosure.url} date={feeds[0].pubDate} />}
-        {alert && <Alert severity="error">sadsadsa</Alert>}
         <Box mt={9}>
-            <Grid container spacing={2}>
+            <Grid container spacing={4}>
                 <Grid item lg={9}>
                     <Typography variant="h4" component='h1'>Lates Episodes</Typography>
                     {/* <Box p={2}>
@@ -75,6 +82,13 @@ function ShowAudioCards() {
                             <SmallAudioCard key={i} episode={feed.itunes.episode} mp3Src={feed.enclosure.url} date={feed.pubDate} description={feed.content} />
                         ))}
                     </Box> */}
+                    <SmallAudioCard />
+                    <SmallAudioCard />
+                    <SmallAudioCard />
+                    <Box mx={2} textAlign='center'>
+                        <Button type="button" className={classes.myBtn}>Previous</Button>
+                        <Button type="button" className={classes.myBtn}>Next</Button>
+                    </Box>
                 </Grid>
                 <Grid lg={3}>
                     <Typography variant="h5" component='h1'>Listen & Subscribe</Typography>
