@@ -9,6 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import SmallAudioCard from '../Components/SmallAudioCards';
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles(() => ({
     mainContainer: {
@@ -44,6 +45,7 @@ function ShowAudioCards() {
 
     const [feeds, setFeeds] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [alert, setAlert] = useState('');
     const links = [{ name: 'spotyfy', href: "https://open.spotify.com/show/4MjXCuDwaxLWAlKjVSS77c" }, { name: 'Apple Podcast', href: "https://podcasts.apple.com/ca/podcast/grindhouse-courthouse-podcast/id1556504779" },
     { name: 'google podacast', href: 'https://podcasts.google.com/feed/aHR0cHM6Ly9tZWRpYS5yc3MuY29tL2dyaW5kaG91c2Vjb3VydGhvdXNlcG9kY2FzdC9mZWVkLnhtbA' }, { name: 'Stitchers', href: 'https://www.breaker.audio/grindhouse-courthouse' }, { name: 'RSS', href: 'https://radiopublic.com/grindhouse-courthouse-podcast-6NB17o' }]
     useEffect(() => {
@@ -56,12 +58,14 @@ function ShowAudioCards() {
                     setIsLoading(false);
                 }).catch(error => {
                     console.log(error);
+                    setAlert(error);
                 });
         }
         getFeedsArr();
     }, [])
     return <Container className={classes.mainContainer}>
         {isLoading ? <CircularProgress /> : <MainAudioCard episode={feeds[0].itunes.episode} mp3Src={feeds[0].enclosure.url} date={feeds[0].pubDate} />}
+        {alert && <Alert severity="error">sadsadsa</Alert>}
         <Box mt={9}>
             <Grid container spacing={2}>
                 <Grid item lg={9}>
