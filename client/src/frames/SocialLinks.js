@@ -8,7 +8,6 @@ import AppleIcon from '@material-ui/icons/Apple';
 import CastIcon from '@material-ui/icons/Cast';
 const useStyles = makeStyles(() => ({
     myContainer: {
-        backgroundColor: '#f4f4f4',
         paddingTop: 100,
         paddingBottom: 100,
         textAlign: 'center',

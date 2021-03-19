@@ -11,59 +11,63 @@ app.use(express.json());
 // static foller for public data like images
 app.use("/static", express.static(path.join(__dirname + '/Public')));
 
-app.get("/", async (req, res) => {
-    const parser = new Parser();
 
-    const feed = await parser.parseURL("https://feeds.redcircle.com/b596f9b0-0ee2-4f3f-b64c-cacfa05c44ed");
+// Defining api routes
+app.use("/feeds", require('./Routes'));
 
-    let items = [];
+// app.get("/", async (req, res) => {
+//     const parser = new Parser();
 
-    // Clean up the string and replace reserved characters
-    const fileName = "data.json";
+//     const feed = await parser.parseURL("https://feeds.redcircle.com/b596f9b0-0ee2-4f3f-b64c-cacfa05c44ed");
 
-    if (fs.existsSync(fileName)) {
-        items = require(`./${fileName}`);
-    }
+//     let items = [];
 
-    // Add the items to the items array
-    await Promise.all(feed.items.map(async (currentItem) => {
+//     // Clean up the string and replace reserved characters
+//     const fileName = "data.json";
 
-        // Add a new item if it doesn't already exist
-        if (items.filter((item) => isEquivalent(item, currentItem)).length <= 0) {
-            items.push(currentItem);
-        }
+//     if (fs.existsSync(fileName)) {
+//         items = require(`./${fileName}`);
+//     }
 
-    }));
+//     // Add the items to the items array
+//     await Promise.all(feed.items.map(async (currentItem) => {
 
-    // Save the file
-    fs.writeFileSync(fileName, JSON.stringify(items));
+//         // Add a new item if it doesn't already exist
+//         if (items.filter((item) => isEquivalent(item, currentItem)).length <= 0) {
+//             items.push(currentItem);
+//         }
 
-    return res.status(200).json({ items });
+//     }));
 
-});
+//     // Save the file
+//     fs.writeFileSync(fileName, JSON.stringify(items));
 
-app.get("/getRssFeed", (req, res) => {
-    let items = [];
+//     return res.status(200).json({ items });
 
-    if (fs.existsSync("data.json")) {
-        items = require("./data.json");
-        console.log(items[0].title);
-    } else {
-        return res.status(400).json({ error: "No File Exist" });
-    }
+// });
 
-    return res.status(200).json({ items })
+// app.get("/getRssFeed", (req, res) => {
+//     let items = [];
 
-});
+//     if (fs.existsSync("data.json")) {
+//         items = require("./data.json");
+//         console.log(items[0].title);
+//     } else {
+//         return res.status(400).json({ error: "No File Exist" });
+//     }
 
-app.get('/get-live-rss-feed', async (req, res) => {
-    const parser = new Parser();
-    let items = [];
-    const feed = await parser.parseURL("https://feeds.redcircle.com/b596f9b0-0ee2-4f3f-b64c-cacfa05c44ed");
+//     return res.status(200).json({ items })
 
-    return res.status(200).json({ items: feed.items });
+// });
 
-})
+// app.get('/get-live-rss-feed', async (req, res) => {
+//     const parser = new Parser();
+//     let items = [];
+//     const feed = await parser.parseURL("https://feeds.redcircle.com/b596f9b0-0ee2-4f3f-b64c-cacfa05c44ed");
+
+//     return res.status(200).json({ items: feed.items });
+
+// })
 
 const PORT = process.env.PORT || 4000;
 
